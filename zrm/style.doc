@@ -1,0 +1,178 @@
+TeX code from the Z Reference Manual.
+-------------------------------------
+
+The Z Reference Manual uses a LaTeX document style called `phi', and
+style options `fuzz' -- the standard Z macros -- and `zrm' -- some
+special stuff.  The phi style is based on a design document from
+Prentice-Hall, but I implemented only the design elements that
+occurred in the ZRM, and added a couple of my own: for example, the
+`manual page' layout.
+
+There are three sections to these notes: one on phi.sty, one on
+zrm.sty, and a final one on the three index-generating programs
+`index', `symdex' and `gloss'.
+
+
+PHI.STY -- A LaTeX style for the Prentice-Hall red-and-white series
+-------    - ----- ----- --- --- ------------- ------------- ------
+
+This style is modelled on the `book' style of LaTeX, but has quite a
+lot of differences ...
+
+No base size style option (10pt, 11pt, 12pt) is supported. The only
+available base size is 12pt.
+
+The following sectioning commands are supported, in both unstarred
+and starred forms:
+
+	\chapter
+	\section
+	\subsection
+	\paragraph
+
+Section numbering applies to chapters, sections and subsections.
+Paragraphs are not numbered.  The right-hand running head is taken
+from the last subhead on the page (not the first as in ordinary
+LaTeX).
+
+A special `thema' environment allows a decorative quotation to be
+added to a chapter opening.  Here is an example from the ZRM:
+
+    \chapter*{Preface}
+
+    \begin{thema}
+	\begin{playlet}
+	\item[Jack] You're quite perfect\index{perfection}, 
+		Miss Fairfax.
+	\item[Gwendolen] Oh! I hope I am not that. It would 
+		leave no room for developments, and I intend 
+		to develop in many~directions.
+		\source{Oscar Wilde, {\em The 
+				Importance of Being Earnest}}
+	\end{playlet}
+    \end{thema}
+
+    \noindent
+    The Z notation for specifying and designing software 
+    has evolved ...
+
+The following variants of the list environment are supported (page
+numbers refer to examples in the ZRM):
+
+* enumerate
+* itemize (p. 2)
+* quotation -- smaller type, paragraphs indented, whole environment
+  deeply indented (p. xi).
+* playlet -- with names of speakers set in caps and small caps (see
+  above for example from p. vii).
+* oblig -- list of proof obligations, numbered (a1) (a2) (a3), etc,
+  where the `a' is an argument to the environment (p. 126).
+* manpage -- UNIX-style manual page (p. 89).
+* description (p. ix).
+
+There is a simple titlepage environment for making a cover sheet --
+P-H generally set the real title-page themselves.
+
+The \tableofcontents command is supported. There are environments
+called theindex and theglossary; in the index, there is a special
+command \indexspace for the space between items with different
+initial letters. There is an \indexnote{...} command for specifying
+a descriptive note to be included at the beginning of the index. Use
+it before the start of the theindex environment.
+
+Another environment, thesymdex, allows an index of symbols to be
+compiled.  This index is set in smaller type and three equal
+columns. If it won't fit on one page, you lose.  As well as the
+commands \makeindex, \index and \makeglossary, \glossary, there is a
+new pair \makesymdex and \symdex which write entries on the file
+jobname.sdx.
+
+The float placement parameters for figures and tables are unchanged
+from the LaTeX defaults, and there is no provision for any special
+kinds or formats of floats.
+
+
+ZRM.STY -- Special little hacks for the Z Reference Manual
+-------    ------- ------ ----- --- --- - --------- ------
+
+* \source{...} works like this:
+
+    \begin{quotation}
+	Anyone can write a new set of TeX macros; they only need to
+	memorize 360 pages of arcane gobbledegook and it's easy!
+	\source{Mike Spivey}
+    \end{quotation}
+
+The source of the quotation is ranged right, and put on a line of
+its own if necessary.
+
+* \because{...} puts an explanation on its own line in an `argue'
+  environment:
+
+    \begin{argue}
+	\dom birthday' \\
+    \t1	= known' &			invariant after \\
+    \t1	= \{\,i: 1 \upto hwm' \spot names'(i)\,\} & 
+					from $Abs'$ \\
+    \t1	= \{\,i: 1 \upto hwm \spot names'(i)\,\} 
+				\cup \{names'(hwm')\} \\
+	    \because{since $hwm' = hwm + 1$}
+    \t1	= \{\,i: 1 \upto hwm \spot names(i)\,\} 
+				\cup \{name?\} \\
+	    \because{since $names' = names \oplus 
+				\{hwm' \mapsto name?\}$}
+    \t1	= known \cup \{name?\} &	from $Abs$ \\
+    \t1	= \dom birthday \cup \{name?\} & invariant before
+    \end{argue}
+
+* There is a `display' environment for one-off math displays: it
+  behaves like all the other Z displays.
+
+* A - in math mode makes a hyphen; for a minus sign, use \minus.
+
+* \lopt and \ropt make slanting square brackets.
+
+* a name environment is provided for the `name' section of a
+  manpage. Also a laws environment for the `laws' section. Goodness
+  knows what the \- command does.
+
+* There is a menu environment for the little indexes of symbols at
+  the beginning of chapter 4.
+
+* The syntax environment is modified to set everything in the \sf
+  font.
+
+* There is an `equations' environment: what for?
+
+* \symlist{a b c} makes a list of math symbols.
+
+* There's a whole lot of stuff for making fragments of schema boxes
+  to use in syntax charts.
+
+* \(...\) sets its argument as a math formula in sans-serif.
+
+As well as these commands and environments, there are a few
+adjustments to parameters: 
+
+* \em is redefined to use slanted type instead of italics.
+
+* Page breaking is allowed before all math displays, not just
+  schemas.
+
+* \also gives only 3pt (\jot) of extra vertical space, not
+  half a line (\medskipamount) as in fuzz.sty
+
+
+Indexing
+--------
+
+The ZRM has three indexes: a general index, an index of symbols, and
+a glossary. Each is compiled from annotations in the text of the
+book.  When LaTeX finds one of these annotations as it processes the
+book, it writes a record to one of three output files, one for each index.
+There are three programs that process these output files -- zrm.idx,
+zrm.sdx, and zrm.glo -- into the three input files -- index.tex,
+symdex.tex, and gloss.tex -- for the next run of LaTeX.  As with
+LaTeX cross-references, it is necessary to run the book twice to get
+everything up to date. The three programs are run between the first
+LaTeX run and the second one.

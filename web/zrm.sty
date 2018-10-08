@@ -1,0 +1,825 @@
+% 'ZRM' document style for ZRM as PHI red-and-white book.
+
+\typeout{Document Style `zrm' dated 01/04/98.}
+
+\@options
+\def\@ptsize{2}
+\@twosidetrue
+
+% FONTS
+
+\lineskip 1pt            % \lineskip is 1pt for all font sizes.
+\normallineskip 1pt
+\def\baselinestretch{1}
+
+\medskipamount=7pt plus3pt minus2pt
+\bigskipamount=14pt plus6pt minus4pt
+
+\def\@normalsize{\@setsize\normalsize{14pt}\xiipt\@xiipt
+\abovedisplayskip=\medskipamount
+\belowdisplayskip=\abovedisplayskip
+\abovedisplayshortskip=\abovedisplayskip
+\belowdisplayshortskip=\belowdisplayskip}
+
+\def\footnotesize{\@setsize\footnotesize{13pt}\xipt\@xipt
+\abovedisplayskip=6pt plus3pt minus2pt
+\belowdisplayskip=\abovedisplayskip
+\abovedisplayshortskip=\abovedisplayskip
+\belowdisplayshortskip=\belowdisplayskip}
+ 
+\def\small{\@setsize\small{13pt}\xipt\@xipt}
+\def\large{\@setsize\large{21pt}\xivpt\@xivpt}
+\def\Large{\@setsize\Large{28pt}\xviipt\@xviipt}
+\def\LARGE{\@setsize\LARGE{28pt}\xxpt\@xxpt}
+\def\huge{\@setsize\huge{35pt}\xxvpt\@xxvpt}
+
+\font\Hugebf=cmbx10 scaled2986
+
+\normalsize  % Choose the normalsize font.
+
+% PAGE LAYOUT
+
+% VERTICAL SPACING:        
+
+                         % Top of page:
+\topmargin 0pt           %    Nominal distance from top of page to top of
+                         %    box containing running head.
+\headheight 14pt         %    Height of box containing running head.
+\headsep    14pt         %    Space between running head and text.
+\topskip    14pt         %    '\baselineskip' for first line of page.
+                         % Bottom of page:
+\footheight 14pt         %    Height of box containing running foot.
+\footskip   35pt         %    Distance from baseline of box containing foot 
+                         %    to baseline of last line of text.
+
+\newdimen\normaltopskip \normaltopskip=\topskip
+
+% DIMENSION OF TEXT:
+
+\textheight 14pt \multiply\textheight by44
+			 % Height of text (excluding running head and foot).
+\textwidth  35pc         % Width of text line.
+                         % For two-column mode: 
+\columnsep  24pt         %    Space between columns 
+\columnseprule 0pt       %    Width of rule between columns.
+
+% A better version of \raggedbottom: the bottom glue is made only
+% finitely stretchy, so any flex in the page can help out: this
+% stretch is added to \topskip so it is taken into account in
+% page-breaking.
+\newskip\botglue \botglue=0pt plus56pt
+\def\raggedbottom{\topskip=\normaltopskip
+	\advance\topskip by\botglue
+	\def\@texttop{\vskip-\botglue}%
+	\def\@textbottom{\vskip\botglue}}
+
+% PARAGRAPHS
+
+\newskip\normalparindent
+
+\parskip    0pt                    % Extra vertical space between paragraphs.
+\normalparindent  18pt             % Width of paragraph indentation.
+\parindent  \normalparindent
+\topsep     \medskipamount         % Extra vertical space, in addition to 
+                                   % \parskip, added above and below list and
+                                   % paragraphing environments.
+\partopsep  0pt                    % Extra vertical space, in addition to 
+                                   % \parskip and \topsep, added when user
+                                   % leaves blank line before environment.
+\itemsep    \medskipamount         % Extra vertical space, in addition to 
+                                   % \parskip, added between list items.
+
+\@lowpenalty   51      % Produced by \nopagebreak[1] or \nolinebreak[1]
+\@medpenalty  151      % Produced by \nopagebreak[2] or \nolinebreak[2]
+\@highpenalty 301      % Produced by \nopagebreak[3] or \nolinebreak[3]
+
+\@beginparpenalty -\@lowpenalty    % Before a list or paragraph environment.
+\@endparpenalty   -\@lowpenalty    % After a list or paragraph environment.
+\@itempenalty     -\@lowpenalty    % Between list items.
+
+% CHAPTERS AND SECTIONS
+
+% \@makechapterhead {TEXT} : Makes the heading for the \chapter command.
+\def\@makechapterhead#1{\vbox to196pt{\parindent 0pt \raggedright 
+	\edef\chapnum{\uppercase{Chapter \arabic{chapter}}}
+	\normalsize\rm \strut\chapnum\par
+	\vskip 14pt \huge\rm #1\par \vfil}}
+
+% \@makeschapterhead {TEXT} : Makes the heading for the \chapter* command.
+\def\@makeschapterhead#1{\vbox to196pt{\parindent 0pt \raggedright 
+	\vskip 28pt \huge\rm \strut#1\par \vfil}}
+
+% THEMA -- injects opening quote into chapter heading
+\def\thema{\nointerlineskip\vbox to0pt\bgroup\vss}
+\def\endthema{\par\unskip\vskip-\prevdepth\vskip\baselineskip\egroup}
+
+\def\chapter{\@prechapter\secdef\@chapter\@schapter}
+
+\def\@prechapter{\clearpage  % Starts new page.
+   \thispagestyle{head}      % Page style of chapter page is 'head'
+   \global\@topnum\z@        % Prevents figures from going at top of page.
+   \@afterindentfalse}       % Suppresses indent in first paragraph.
+
+\def\@chapter[#1]#2{%
+    \ifnum \c@secnumdepth >\m@ne
+        \refstepcounter{chapter}
+        \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
+    \else \addcontentsline{toc}{chapter}{#1}\fi
+    \chaptermark{#1}
+    \@makechapterhead{#2}
+    \@afterheading}
+
+\def\@schapter#1{\addcontentsline{toc}{chapter}{#1}
+	\@mkboth{#1}{#1} \@makeschapterhead{#1} \@afterheading}
+
+% \unlistedchapter: not numbered or listed in table of contents.
+\def\unlistedchapter#1{\@prechapter
+	\@mkboth{#1}{#1} \@makeschapterhead{#1} \@afterheading}
+
+\def\section{\@subhead{section}{1}{28pt}{28pt}{14pt}{\large\bf}}
+\def\subsection{\@subhead{subsection}{2}{14pt}{28pt}{14pt}{\normalsize\bf}}
+\def\paragraph{\@subhead{paragraph}{3}{14pt}{21pt}{7pt}{\normalsize\bf}}
+
+% \@subhead{NAME}{LEVEL}{BEFORE}{ABOVE}{AFTER}{STYLE}*{HEADING}
+%           1     2      3       4      5      6
+\def\@subhead#1#2#3#4#5#6{\if@noskipsec\leavevmode\fi\par
+	\if@nobreak\everypar{}\fi
+	\@ifstar{\@starhead{#3}{#4}{#5}{#6}}%
+		{\@head{#1}{#2}{#3}{#4}{#5}{#6}}}
+
+% \@head{NAME}{LEVEL}{BEFORE}{HEIGHT}{AFTER}{STYLE}{HEADING}
+%        1     2      3       4       5      6      7
+\def\@head#1#2#3#4#5#6#7{\ifnum#2>\c@secnumdepth\def\@svsec{}%
+	\else\refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname\ }\fi
+	\@xhead{#3}{#4}{#5}{#6}%
+	\vbox to#4{#6\vfil\hbox{\@svsec#7}}%
+	\csname #1mark\endcsname{#7}%
+	\addcontentsline{toc}{#1}{\ifnum#2>\c@secnumdepth\else
+		\protect\numberline{\csname the#1\endcsname}\fi #7}%
+	\@yhead{#5}}
+
+% \@starhead{BEFORE}{HEIGHT}{AFTER}{STYLE}{HEADING}
+%            1       2       3      4      5
+\def\@starhead#1#2#3#4#5{\@xhead{#1}{#2}{#3}{#4}%
+	\vbox to#2{#4\vfil\hbox{#5}}\@yhead{#3}}
+
+% \@xhead{BEFORE}{HEIGHT}{AFTER}{STYLE}
+%         1       2       3      4
+\def\@xhead#1#2#3#4{\if@nobreak\else
+	% Calculate the depth needed for two lines of next section
+	\dimen@=#1\advance\dimen@ by#2\advance \dimen@ by#3
+	\advance\dimen@ by2\baselineskip
+	% Output penalties and glue to let this page go short
+	% if there's not enough room
+	\nobreak
+	\vskip-\prevdepth\nointerlineskip
+	\vskip 0pt plus\dimen@
+	\penalty \@medpenalty
+	\vskip 0pt plus-\dimen@
+	\vskip #1\fi}
+
+\def\@yhead#1{\nobreak\vskip #1\@afterindentfalse\@afterheading}
+
+% Default initializations of \...mark commands.
+\def\chaptermark#1{}
+
+% The right mark is \botmark, not \firstmark (cf. p53 of ZRM).
+\def\rightmark{\expandafter\@rightmark\botmark}
+
+\setcounter{secnumdepth}{2} % As far as subsection
+
+% LISTS
+
+\leftmargini=\parindent
+\leftmarginii=\parindent
+\labelsep=5pt
+\parsep=0pt
+
+\leftmargin\leftmargini
+\labelwidth\leftmargini\advance\labelwidth-\labelsep
+
+\def\@listi{\leftmargin\leftmargini}
+
+\def\@listii{\leftmargin\leftmarginii
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep}
+
+% ENUMERATE
+%  Enumeration is done with four counters: enumi, enumii, enumiii
+%  and enumiv, where enumN controls the numbering of the Nth level
+%  enumeration.  The label is generated by the commands \labelenumi 
+%  ... \labelenumiv.  The expansion of \p@enumN\theenumN defines the 
+%  output of a \ref command.  
+
+\def\labelenumi{\arabic{enumi}.}    
+\def\theenumi{\arabic{enumi}}     
+ 
+\def\labelenumii{(\alph{enumii})}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+
+% ITEMIZE
+% Itemization is controlled by four commands: \labelitemi, \labelitemii,
+% \labelitemiii, and \labelitemiv, which define the labels of the various 
+% itemization levels.
+
+\def\labelitemi{$\bullet$}
+\def\labelitemii{\bf --}
+
+% QUOTATION
+%	used only for decorative quotations
+%   
+\def\quotation{\small\hyphenpenalty=10000\raggedright
+    \list{}{\listparindent=1.5em \advance\leftmargin by\leftmarginii}\item[]} 
+\let\endquotation=\endlist
+
+% PLAYLET
+
+%	used for decorative quotation
+%
+\def\playlet{\small\hyphenpenalty=10000\raggedright
+    \list{}{\listparindent=1.5em \itemsep=0pt \labelsep=0.5em
+		\labelwidth=0pt \def\makelabel##1{\hskip\labelsep{\sc ##1:}}%
+		\advance\leftmargin by\leftmarginii}}
+\let\endplaylet=\endlist
+
+% OBLIG
+%	lists of things to be proved.
+%
+\newcounter{oblig}
+
+\def\oblig#1{\list{(#1\arabic{oblig})}%
+	{\advance\leftmargin by\leftmarginii\usecounter{oblig}}}
+\let\endoblig=\endlist
+
+% MANPAGE
+
+% \begingroup and \endgroup are needed here because the list
+% environment has \endgroup ... \begingroup inside it.
+\def\manpage{\if@nobreak\else\newpage\fi\raggedbottom
+	\begingroup\list{}{\parsep=\medskipamount \labelwidth=0pt
+	\itemindent=-\leftmargin \zedindent=0pt
+	\let\makelabel=\manlabel \let\item=\manitem}}
+\def\endmanpage{\endlist\endgroup\newpage}
+
+\let\@@item=\item
+\def\manlabel#1{\hspace\labelsep \bf#1}
+\def\manitem[#1]{\@@item[#1]\leavevmode\par}
+
+% DESCRIPTION 
+%
+\def\description{\list{}{\labelwidth\z@ \itemindent-\leftmargin
+       \let\makelabel\descriptionlabel}}
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\let\enddescription\endlist
+
+\newdimen\descriptionmargin
+\descriptionmargin=3em
+
+% TITLE PAGE
+%	cover sheet for the CRC: P-H do the real title page themselves
+\def\titlepage{\newpage \thispagestyle{empty}}
+\def\endtitlepage{\newpage}
+
+% CHAPTERS AND SECTIONS
+
+\newcounter{chapter}
+\newcounter{section}[chapter]
+\newcounter{subsection}[section]
+\newcounter{paragraph}[subsection]
+
+\def\thechapter       {\arabic{chapter}}
+\def\thesection       {\thechapter.\arabic{section}}
+\def\thesubsection    {\thesection.\arabic{subsection}}
+
+% In chapter headings, the number is spelt out!
+\def\english#1{\@english{\@nameuse{c@#1}}}
+\def\@english#1{\ifcase #1 zero\or one\or two\or three\or four\or
+	five\or six\or seven\or eight\or nine\or ten\or eleven\or
+	twelve\else \@ctrerr\fi}
+
+% TABLE OF CONTENTS
+
+\def\tableofcontents{{\raggedbottom \unlistedchapter{Contents} 
+	\raggedright \small \@starttoc{toc} \newpage}}
+	
+\def\l@chapter{\if@nobreak\else\vskip0.5\baselineskip\fi
+	\@tocline{2\normalparindent}}
+\def\l@section{\@tocline{4\normalparindent}}
+\def\l@subsection{\@tocline{6\normalparindent}}
+\def\l@paragraph#1#2{}
+
+% \@tocline{INDENT}{TITLE}{PAGE} :
+%   A line in the table of contents, with parameters
+%       INDENT  : Indentation
+%       TITLE   : The text of the entry -- may contain \numberline commands
+%                 which put the number out to the left.
+%       PAGE    : The page number.
+\def\@tocline#1#2#3{{\parindent=#1 \hangindent=#1
+	\rightskip=3em \parfillskip=-\rightskip
+	\@afterindenttrue % Don't know why!
+        \interlinepenalty=10000 \leavevmode #2\hfill \rm #3\par}}
+ 
+\def\numberline#1{\hbox to0pt{\hskip-2\normalparindent #1\hfil}}
+
+% THE INDEX
+
+\newif\if@idxhead \@idxheadfalse
+\newtoks\@idxnote
+
+\def\indexnote{\@idxheadtrue\@idxnote=}
+
+\def\theindex{\columnseprule \z@ \columnsep 24pt \small
+	\twocolumn[\@makeschapterhead{General index}%
+			\if@idxhead\the\@idxnote\par\vskip\baselineskip\fi]
+	\@mkboth{General index}{General index}
+	\addcontentsline{toc}{chapter}{General index}
+    	\thispagestyle{head} \parindent\z@ \raggedright \raggedbottom
+	\exhyphenpenalty=10000 % To stop breaking of 136--7.
+	\let\item\@idxitem}
+
+\def\@idxitem{\par\hangindent=36pt}
+\def\subitem{\par\hangindent=36pt \hspace*{12pt}}
+
+\def\endtheindex{\onecolumn}
+
+\def\indexspace{\par\vskip\baselineskip}
+\def\indexbreak{\par\vfill\break}
+
+\def\thesymdex{\clearpage \chapter*{Index of symbols} \small
+	\setbox0=\vbox\bgroup\let\\=\cr \prevdepth=0pt
+			\halign\bgroup##\unskip\hfil&\quad##\unskip\hfil\cr}
+
+\def\endthesymdex{\egroup\egroup
+	\dimen0=\ht0 
+	\advance\dimen0 by2\baselineskip
+	\divide\dimen0 by3
+	\splittopskip=\baselineskip \vbadness=10000 \nointerlineskip
+	\hbox to\hsize{\valign{##\vfil\cr\vsplit0 to\dimen0\cr
+				\noalign{\hfil}\vsplit0 to\dimen0\cr
+				\noalign{\hfil}\box0\cr}}}
+
+\def\makesymdex{\if@filesw \newwrite\@symdexfile
+  \immediate\openout\@symdexfile=\jobname.sdx
+  \def\symdex{\@bsphack\begingroup
+             \def\protect####1{\string####1\space}\@sanitize
+             \@wrsymdex}\typeout
+  {Writing symdex file \jobname.sdx }\fi}
+
+\def\@wrsymdex#1{\let\thepage\relax
+   \xdef\@gtempa{\write\@symdexfile{\string
+      \symdexentry{#1}{\thepage}}}\endgroup\@gtempa
+   \if@nobreak \ifvmode\nobreak\fi\fi\@esphack}
+
+\def\symdex{\@bsphack\begingroup \@sanitize\@index}
+
+% THE GLOSSARY
+%
+\def\theglossary{\chapter*{Glossary}\@mkboth{Glossary}{Glossary}
+	\vskip-\topsep % to counteract glue at top of description.
+	\begingroup\description}
+\def\endtheglossary{\enddescription\endgroup}
+
+% FIGURES AND TABLES
+% These are the LaTeX defaults.  There are no floats in ZRM, but
+% omitting these definitions breaks the LaTeX output routine.
+\setcounter{topnumber}{2}
+\def\topfraction{.7}
+\setcounter{bottomnumber}{1}
+\def\bottomfraction{.3}
+\setcounter{totalnumber}{3}
+\def\textfraction{.2}
+\def\floatpagefraction{.5}
+\setcounter{dbltopnumber}{2}
+\def\dbltopfraction{.7}
+\def\dblfloatpagefraction{.5}
+
+% PAGE STYLES
+
+\mark{{}{}}
+
+% \ps@empty and \ps@plain defined in LATEX.TEX
+
+\def\ps@head{\let\@mkboth\@gobbletwo
+	\def\@oddhead{}\def\@evenhead{}%
+	\def\@oddfoot{\rm\hfil\thepage\hfil}\let\@evenfoot=\@oddfoot}
+
+\def\ps@body{\let\@mkboth=\markboth
+	\def\@oddfoot{}\let\@evenfoot=\@oddfoot
+	\def\@evenhead{\rm\thepage\hskip 24pt\sl\leftmark\hfil}%
+	\def\@oddhead{\hfil\sl\rightmark\hskip 24pt\rm\thepage}%
+	\def\chaptermark##1{\markboth{##1}{##1}}%
+	\def\sectionmark##1{\markright{\ifnum\c@secnumdepth>\z@
+		\thesection\ \fi ##1}}}
+
+% FOOTNOTES -- copied almost directly from book.sty
+
+\def\footnoterule{\kern-3pt
+  \hrule width .4\columnwidth
+  \kern 2.6pt}                 % The \hrule has default height of .4pt.
+
+\@addtoreset{footnote}{chapter}  % Numbers footnotes within chapters
+
+\long\def\@makefntext#1{\parindent 1.5em\noindent
+            \hbox to 1.5em{\hss$\m@th^{\@thefnmark}$}#1}
+
+\footnotesep=9.1pt    % Height of strut placed at the beginning of every
+                      % footnote = height of normal \footnotesize strut,
+                      % so no extra space between footnotes. (= 0.7 * 13pt)
+ 
+\skip\footins=\bigskipamount  % Space between last line of
+                              % text and top of first footnote.
+ 
+
+% MISCELLANEOUS
+
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi, 
+  \number\year}
+
+\arrayrulewidth=0.4pt
+\doublerulesep=2pt
+
+\def\raggedright{\let\\=\@centercr\@rightskip=0pt plus2em
+	\rightskip\@rightskip \leftskip\z@ \parindent\z@}
+
+% INITIALIZATION
+
+\ps@body                    % `body' page style
+\pagenumbering{arabic}      % Arabic page numbers
+\onecolumn                  % Single-column.
+\overfullrule=5pt	    % Do mark overfull boxes
+
+\def\manbreak{\vadjust{\break}}
+
+% SPECIALS FOR ZRM
+
+% ZED STUFF
+
+% \def\fuzz{{\large\it f\kern0.1em}{\normalsize\sc uzz}}
+
+\def\@setmcodes#1#2#3{{\count0=#1 \count1=#3
+  \loop \global\mathcode\count0=\count1 \ifnum \count0<#2
+  \advance\count0 by1 \advance\count1 by1 \repeat}}
+\@setmcodes{`A}{`Z}{"7441}
+\@setmcodes{`a}{`z}{"7461}
+\def~{\ifmmode\,\else\penalty\@M\ \fi}
+\mathcode`\;="8000 % Makes ; active in math mode
+{\catcode`\;=\active \gdef;{\mathchar"3B\;}}
+\def\@myop#1{\mathop{\mathstrut{#1}}\nolimits}
+\def\_{\leavevmode \ifmmode\else\kern0.06em\fi \vbox{\hrule width0.5em}}
+\mathcode`\"="8000
+\def\@kwote#1"{\hbox{\it #1}}
+{\catcode`\"=\active \global\let"=\@kwote}
+\mathchardef\spot="320F
+\mathcode`\@=\spot
+\mathcode`\|=\mid
+\def\bsup#1\esup{^{#1}}
+\def\inrel#1{\mathrel{\underline{#1}}}
+\newdimen\zedindent	\zedindent=\leftmargini
+\newdimen\zedleftsep	\zedleftsep=1em
+\newdimen\zedtab	\zedtab=2em
+\newdimen\zedbar	\zedbar=6em
+\newskip\zedskip	\zedskip=0.5\baselineskip plus0.333333\baselineskip
+				minus0.333333\baselineskip
+\def\zedsize{}
+\newcount\interzedlinepenalty \interzedlinepenalty=10000
+\newcount\preboxpenalty \preboxpenalty=0
+\newif\ifzt@p		\zt@pfalse
+\def\@jot{0.5\zedskip}
+\def\@narrow{\advance\linewidth by-\zedindent}
+\def\@zrulefill{\leaders\hrule height\arrayrulewidth\hfill}
+\def\@topline#1{\hbox to\linewidth{%
+  \vrule height\arrayrulewidth width\arrayrulewidth
+  \vrule height0pt depth\@jot width0pt
+  \hbox to\zedleftsep{\@zrulefill\thinspace}%
+  #1\thinspace\@zrulefill}}
+\def\@zedline{\omit \vrule height\arrayrulewidth width\linewidth \cr}
+\def\where{\@zskip\@jot
+  \omit \vrule height\arrayrulewidth width\zedbar \cr
+  \@zskip\@jot}
+\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \vskip\zedskip}}
+\def\@zskip#1{\crcr \omit \vrule height#1 width\arrayrulewidth \cr}
+\def\@zlign{\tabskip\z@skip\everycr{}} % \@lign missing in SliTeX
+\let\tie=\t
+\def\t#1{\afterassignment\@t\count@=#1}
+\def\@t{\hskip\count@\zedtab}
+\def\@setzsize{\let\next=\@nomath\def\@nomath##1{}%
+  \skip0=\abovedisplayskip\skip1=\belowdisplayskip
+  \zedsize \let\@nomath=\next 
+  \abovedisplayskip=\skip0\belowdisplayskip=\skip1}
+\def\@zed{\ifvmode\@zleavevmode\fi
+  $$\global\zt@ptrue
+  \@setzsize
+  \advance\linewidth by-\zedindent
+  \advance\displayindent by\zedindent
+  \def\\{\crcr}% Must have \def and not \let for nested alignments.
+  \let\par=\relax
+  \tabskip=0pt}
+\def\@znoskip{\offinterlineskip
+  \everycr={\noalign{\ifzt@p \global\zt@pfalse
+    % Simulate interline glue
+      \ifdim\prevdepth>-1000pt \skip0=\normalbaselineskip
+        \advance\skip0by-\prevdepth \advance\skip0by-\ht\strutbox
+        \ifdim\skip0<\normallineskiplimit \vskip\normallineskip
+        \else \vskip\skip0 \fi\fi
+    \else \penalty\interzedlinepenalty \fi}}}
+\def\zed{\@zed\@znoskip\halign to\linewidth\bgroup
+  \strut$\@zlign##$\hfil \tabskip=0pt plus1fil\cr}
+\def\endzed{\crcr\egroup$$\global\@ignoretrue}
+\def\[{\begingroup\zed}
+\def\]{\crcr\egroup$$\endgroup\ignorespaces}
+\def\axdef{\def\also{\@zskip\zedskip}%
+  \predisplaypenalty=\preboxpenalty
+  \@zed\@znoskip \halign to\linewidth\bgroup
+    \strut \vrule width\arrayrulewidth \hskip\zedleftsep
+    $\@zlign##$\hfil \tabskip=0pt plus1fil\cr}
+\let\endaxdef=\endzed
+\def\schema#1{\@ifnextchar[{\@schema{#1}}{\@nschema{#1}}}
+\def\@schema#1[#2]{\@nschema{#1[#2]}}
+\def\@nschema#1{\@narrow\axdef \omit\@topline{$\strut#1$}\cr}
+\def\endschema{\@zskip\@jot \@zedline \endzed}
+\@namedef{schema*}{\@narrow\axdef \@zedline \@zskip\@jot}
+\expandafter\let\csname endschema*\endcsname=\endschema
+\def\gendef{\@ifnextchar[{\@gendef}{\@ngendef}}
+\def\@gendef[#1]{\@narrow\axdef \omit \setbox0=\hbox{$\strut[#1]$}%
+  \rlap{\raise\doublerulesep\@topline{\hskip\wd0}}\@topline{\box0}\cr}
+\def\@ngendef{\@narrow\axdef \@zedline \omit \hbox to\linewidth{\vrule
+  height\doublerulesep width\arrayrulewidth \@zrulefill}\cr \@zskip\@jot}
+\let\endgendef=\endschema
+\def\argue{\@zed \interzedlinepenalty=\interdisplaylinepenalty
+  \openup\@jot \halign to\linewidth\bgroup
+    \strut$\@zlign##$\hfil \tabskip=0pt plus1fil
+    &\hbox to0pt{\hss[\@zlign##\unskip]}\tabskip=0pt\cr
+    \noalign{\vskip-\@jot}}
+\let\endargue=\endzed
+\def\because#1{\noalign{\vskip-\jot}&#1\cr}
+\def\syntax{\@zed\@znoskip \halign\bgroup
+  \strut$\@zlign##$\hfil &\hfil$\@zlign{}##{}$\hfil
+  &$\@zlign##$\hfil\cr}
+\let\endsyntax=\endzed
+\def\infrule{\@zed\@znoskip \halign\bgroup
+  \strut\quad$\@zlign##$\quad\hfil&\quad\@zlign##\hfil\cr}
+\let\endinfrule=\endzed
+\def\derive{\crcr \noalign{\vskip\@jot} \omit\@zrulefill
+  \@ifnextchar[{\@xderive}{\@yderive}}
+\def\@xderive[#1]{&$\smash{\lower 0.5ex\hbox{$[\;#1\;]$}}$\cr 
+  \noalign{\vskip\@jot}}
+\def\@yderive{\cr \noalign{\vskip\@jot}}
+\def\@zleavevmode{\if@inlabel \indent
+  \else\if@noskipsec \indent
+  \else\if@nobreak \global\@nobreakfalse
+      \everypar={}\abovedisplayskip=0pt\fi
+    {\parskip=0pt\noindent}\fi\fi}
+
+\newfam\oxfam
+\font\elvox=oxsz10 scaled\magstephalf
+\font\twlox=oxsz10 scaled\magstep1
+\@addfontinfo\@xipt{\textfont\oxfam=\elvox}
+\@addfontinfo\@xiipt{\textfont\oxfam=\twlox}
+\@normalsize
+\edef\@fz{\ifcase\oxfam 0\or 1\or 2\or 3\or 4\or 5\or 6\or 7\or
+  8\or 9\or A\or B\or C\or D\or E\or F\fi}
+\let\@mc=\mathchardef
+\@mc \lblot	"4\@fz09
+\@mc \rblot	"5\@fz0A
+\@mc \bind      "2\@fz01
+\def \defs	{\mathrel{\widehat=}}
+\def \power	{\@myop{\mathchar"\@fz0B}}
+\let \cross	\times
+\def \lambda	{\@myop{\mathchar"115}}
+\def \mu	{\@myop{\mathchar"116}}
+\@mc \lbag	"4\@fz0E
+\@mc \rbag	"5\@fz0F
+\def \lnot	{\neg\;}
+\@mc \land	"325E
+\@mc \lor	"325F
+\let \implies	\Rightarrow
+\let \iff	\Leftrightarrow
+\def \forall	{\@myop{\mathchar"238}}
+\def \exists	{\@myop{\mathchar"239}}
+\@mc \hide	"326E
+\@mc \project	"3\@fz02
+\def \pre	{{\rm pre}\;}
+\@mc \semi	"3\@fz1C
+\@mc \ldata	"4\@fz12
+\@mc \rdata	"5\@fz13
+\let \shows	\vdash
+\def \pipe      {\mathrel{\mathchar"13E\!\!\mathchar"13E}}
+\def \LET       {{\bf let}\;}
+\def \IF	{{\bf if}\;}
+\def \THEN	{\mathrel{\bf then}}
+\def \ELSE	{\mathrel{\bf else}}
+\@mc \emptyset	"0\@fz1E
+\@mc \rel	"2\@fz23
+\def \dom	{\mathop{\rm dom}}
+\def \ran	{\mathop{\rm ran}}
+\def \id	{\mathop{\rm id}}
+\@mc \comp	"2\@fz1C
+\@mc \dres	"2\@fz03
+\@mc \rres	"2\@fz04
+\@mc \ndres	"2\@fz05
+\@mc \nrres	"2\@fz06
+\def \inv	{^\sim}
+\@mc \limg	"4\@fz10
+\@mc \rimg	"5\@fz11
+\@mc \pfun	"2\@fz14
+\@mc \fun	"2\@fz22
+\@mc \pinj	"2\@fz19
+\@mc \inj	"2\@fz18
+\@mc \psurj	"2\@fz17
+\@mc \surj	"2\@fz16
+\@mc \bij	"2\@fz1B
+\@mc \nat	"0\@fz0D
+\@mc \num	"0\@fz1D
+\def \div	{\mathbin{\sf div}}
+\def \mod	{\mathbin{\sf mod}}
+\def \upto	{\mathbin{\ldotp\ldotp}}
+\def \plus	{^+}
+\def \star	{^*}
+\def \finset	{\@myop{\mathchar"\@fz0C}}
+\@mc \ffun	"2\@fz15
+\@mc \finj	"2\@fz1A
+\def \seq	{\mathop{\rm seq}}
+\def \iseq	{\mathop{\rm iseq}}
+\@mc \cat	"2\@fz1F
+\@mc \filter	"2\@fz02
+\def \dcat	{\mathop{\cat/}}
+\def \bag	{\mathop{\rm bag}}
+\def \bcount	{\mathbin{\sharp}}
+\@mc \inbag	"3\@fz08
+\let \subbageq  \sqsubseteq
+\def \disjoint  {{\sf disjoint}\;}
+\def \partition {\mathrel{\sf partition}}
+\def \prefix    {\mathrel{\sf prefix}}
+\def \suffix    {\mathrel{\sf suffix}}
+\def \inseq     {\mathrel{\sf in}}
+\@mc \extract   "2\@fz20
+\@mc \uminus    "2\@fz21
+
+% Set source of quotations ranged right with at least 2em space
+\def\source#1{\unskip\nobreak\hfill\penalty-50\qquad\hbox{}\hfill#1\par}
+
+% Most displays are multi-line, so allow breaking before them.
+\predisplaypenalty=\@highpenalty
+\preboxpenalty=\@highpenalty
+
+% Make way for one-off displays
+\def\display{\@zed\@znoskip}
+\def\enddisplay{$$\global\@ignoretrue}
+
+% Most minus signs are in fact hyphens in \sf -- that's \fam8, by assumption.
+\mathchardef\minus=\mathcode`\-
+\mathcode`\-="782D
+
+% < and > generate (fixed size) angle brackets;
+% use \lt and \gt for comparisons
+\mathchardef\lt=\mathcode`\<
+\mathchardef\gt=\mathcode`\>
+\mathcode`\<="4268
+\mathcode`\>="5269
+
+% Old-fashioned \empty is still used in ZRM
+\let\empty=\emptyset
+
+% \lopt and \ropt are italic square brackets -- in \fam4, we assume.
+\mathchardef\lopt="445B
+\mathchardef\ropt="545D
+
+% \powerone and \finsetone are refinements of \power_1 and \finset_1
+\def\powerone{\power_1}
+\def\finsetone{\finset_1}
+
+% \em uses slanted type:
+\def\pem{\ifdim \fontdimen\@ne\font >\z@ \rm \else \sl \fi}
+
+\def\op{\mathbin{\omega}}
+\def\semicolon{\mathchar`\;}
+
+\def\name{\display\halign\bgroup\strut$##$\hfil&\quad--\quad##\hfil\cr}
+\def\endname{\crcr\egroup\enddisplay}
+
+%
+% LAWS environment for laws on manual pages
+%
+% * Allows multi-column law lists
+% * Use \- in place of \\ to span columns
+% * Use \t{n} to indent 2nd & subsequent lines of a law -- automatically
+%	inserts vertical kerning.
+%
+\let\@@t=\t
+\def\laws{\display \openup1\jot \def\t##1{\noalign{\vskip -\jot}\@@t{##1}}%
+	\def\-{\global\let\next=\hidewidth\crcr}%
+	\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \medskip}}%
+	\halign to\linewidth\bgroup
+		&\let\next=\relax\strut$\@lign##$\next\hfil
+						\tabskip=0pt plus1fil\cr%
+		\noalign{\vskip-\jot}}
+\let\endlaws=\endzed
+
+\def\menu{\interzedlinepenalty=\interdisplaylinepenalty
+	\display 
+	\openup1\jot % Try this for size ...
+	\halign to\linewidth\bgroup
+	\strut\hbox to10em{##\hfil}\quad&##\hfil\tabskip=0pt plus1fil\cr}
+\def\endmenu{\crcr\egroup\enddisplay}
+
+\def\syntax{\display
+	\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \medskip}}%
+	\halign to\linewidth\bgroup
+	\strut$\sf##$\hfil &\quad\hfil$\sf##$\hfil\quad&$\sf##$\hfil
+		\tabskip=0pt plus1fil
+		&$\rm ##$\hfil\tabskip=0pt\cr}
+\let\endsyntax=\endzed
+
+\def\equations{\display\interzedlinepenalty=\interdisplaylinepenalty
+	\halign to\linewidth\bgroup
+	\strut$##$\hfil&\hfil${}##{}$\hfil&$##$\hfil\tabskip=0pt plus1fil\cr}
+\let\endequations=\endzed
+
+\def\symlist#1{\hbox{\@xsym#1\@ysym}}
+\def\@xsym#1{$#1$\@ysym}
+\def\@ysym#1{\ifx\@ysym#1\let\next=\@gobble
+	\else\enskip\let\next=\@xsym\fi\next{#1}}
+
+% Display of syntax for boxes
+\newdimen\littleboxwidth \littleboxwidth=180pt
+\def\boxpream{\halign to\littleboxwidth\bgroup
+        \strut\vrule\hskip\zedleftsep$\@lign##$\hfil \tabskip=0pt plus1fil\cr}
+\def\boxtop#1{\omit \hbox to\littleboxwidth{\strut
+	\vrule height0.4pt\hbox to\zedleftsep{\hrulefill\thinspace}%
+	#1\thinspace\hrulefill}\cr}
+\def\boxcontents#1#2{\sf#1 \\
+            \@zskip\jot\noalign{\vskip\jot}\@zskip\jot
+            \omit\llap{$\smash\lopt$\quad}%
+                        \hbox to\zedbar{\hrulefill}\cr\@zskip\jot
+                \sf#2\quad\ropt \\}
+\def\boxend{\@zskip\jot\noalign{\vskip\jot}\@zskip\jot
+	\omit \hbox to\littleboxwidth{\hrulefill}\cr}
+
+\def\({$\sf}
+\def\){$}
+
+\def\prf#1{(p.\ \pageref{p:#1})}
+
+%% TeXbook, Answer to ex. 14.28
+\def\strutdepth{\dp\strutbox}
+\def\marginalstar{\strut\vadjust{\kern-\strutdepth\specialstar}}
+\def\specialstar{\vtop to\strutdepth{%
+	\baselineskip=\strutdepth
+	\vss\llap{*\quad}\null}}
+
+%% Specials for drafting of new edition
+\def\old#1\par{\par}
+\let\new=\relax
+
+%% \reln xRy is either "(x |--> y) in R" or "x R y" according to taste
+%\def\reln#1#2#3{(#1 \mapsto #3) \in #2}
+\def\reln#1#2#3{#1 \inrel{#2} #3}
+
+%% Pascal keywords for Chapter 1
+\def\ARRAY{\mathrel{\bf array}}
+\def\OF{\mathrel{\bf of}}
+\def\PROC{\mathrel{\bf procedure}}
+\def\VAR{\mathrel{\bf var}}
+% \def\IF{\mathrel{\bf if}}	% These are now ...
+% \def\THEN{\mathrel{\bf then}} % ... part of fuzz.sty
+\def\BEGIN{\mathrel{\bf begin}}
+\def\END{{\bf end}}
+\def\WHILE{\mathrel{\bf while}}
+\def\DO{\mathrel{\bf do}}
+
+\let\IN=\inseq % need to index \inseq, but it alphabetizes wrongly
+
+%%
+%% FONTS
+%%
+
+% Use scaled 10pt & 7pt fonts to allow for reduction of CRC
+\font\twlrm=cmr10  scaled\magstep1
+\font\twlbf=cmbx10 scaled\magstep1
+\font\twlsl=cmsl10 scaled\magstep1
+\font\twlsf=cmss10 scaled\magstep1
+\font\twlmi=cmmi10 scaled\magstep1
+\font\twlit=cmti10 scaled\magstep1
+
+\font\egtit=cmti7  scaled\magstep1
+\font\egtsy=cmsy7  scaled\magstep1
+\font\egtrm=cmr7   scaled\magstep1
+\font\egtsf=cmss8
+
+% We need names for these fonts usually loaded on demand
+\font\elvsc=cmcsc10 scaled\magstephalf
+\font\frtnit=cmti10 scaled\magstep2
+
+% use cmex10 at right size not at 10pt
+\font\elvex=cmex10 scaled\magstephalf
+\font\twlex=cmex10 scaled\magstep1
+\@addfontinfo\@xipt{\textfont3=\elvex \scriptfont3=\elvex
+	\scriptscriptfont3=\elvex}
+\@addfontinfo\@xiipt{\textfont3=\twlex \scriptfont3=\twlex
+	\scriptscriptfont3=\twlex}
+
+% use cmss8 not cmss10 for subscripts?
+\@addfontinfo\@xipt{\scriptfont\sffam=\egtsf}
+\@addfontinfo\@xiipt{\scriptfont\sffam=\egtsf}

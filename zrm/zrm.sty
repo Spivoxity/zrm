@@ -1,0 +1,168 @@
+% SPECIALS FOR ZRM
+
+% Set source of quotations ranged right with at least 2em space
+\def\source#1{\unskip\nobreak\hfill\penalty-50\qquad\hbox{}\hfill#1\par}
+
+% Most displays are multi-line, so allow breaking before them.
+\predisplaypenalty=\@highpenalty
+\preboxpenalty=\@highpenalty
+
+% Make way for one-off displays
+\def\display{\@zed\@znoskip}
+\def\enddisplay{$$\global\@ignoretrue}
+
+% Most minus signs are in fact hyphens in \sf -- that's \fam8, by assumption.
+\mathchardef\minus=\mathcode`\-
+\mathcode`\-="782D
+
+% < and > generate (fixed size) angle brackets;
+% use \lt and \gt for comparisons
+\mathchardef\lt=\mathcode`\<
+\mathchardef\gt=\mathcode`\>
+\mathcode`\<="4268
+\mathcode`\>="5269
+
+% Old-fashioned \empty is still used in ZRM
+\let\empty=\emptyset
+
+% \lopt and \ropt are italic square brackets -- in \fam4, we assume.
+\mathchardef\lopt="445B
+\mathchardef\ropt="545D
+
+% \powerone and \finsetone are refinements of \power_1 and \finset_1
+\def\powerone{\power_1}
+\def\finsetone{\finset_1}
+
+% \em uses slanted type:
+\def\pem{\ifdim \fontdimen\@ne\font >\z@ \rm \else \sl \fi}
+
+\def\op{\mathbin{\omega}}
+\def\semicolon{\mathchar`\;}
+
+\def\name{\display\halign\bgroup\strut$##$\hfil&\quad--\quad##\hfil\cr}
+\def\endname{\crcr\egroup\enddisplay}
+
+%
+% LAWS environment for laws on manual pages
+%
+% * Allows multi-column law lists
+% * Use \- in place of \\ to span columns
+% * Use \t{n} to indent 2nd & subsequent lines of a law -- automatically
+%	inserts vertical kerning.
+%
+\let\@@t=\t
+\def\laws{\display \openup1\jot \def\t##1{\noalign{\vskip -\jot}\@@t{##1}}%
+	\def\-{\global\let\next=\hidewidth\crcr}%
+	\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \medskip}}%
+	\halign to\linewidth\bgroup
+		&\let\next=\relax\strut$\@lign##$\next\hfil
+						\tabskip=0pt plus1fil\cr%
+		\noalign{\vskip-\jot}}
+\let\endlaws=\endzed
+
+\def\menu{\interzedlinepenalty=\interdisplaylinepenalty
+	\display 
+	\openup1\jot % Try this for size ...
+	\halign to\linewidth\bgroup
+	\strut\hbox to10em{##\hfil}\quad&##\hfil\tabskip=0pt plus1fil\cr}
+\def\endmenu{\crcr\egroup\enddisplay}
+
+\def\syntax{\display
+	\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \medskip}}%
+	\halign to\linewidth\bgroup
+	\strut$\sf##$\hfil &\quad\hfil$\sf##$\hfil\quad&$\sf##$\hfil
+		\tabskip=0pt plus1fil
+		&$\rm ##$\hfil\tabskip=0pt\cr}
+\let\endsyntax=\endzed
+
+\def\equations{\display\interzedlinepenalty=\interdisplaylinepenalty
+	\halign to\linewidth\bgroup
+	\strut$##$\hfil&\hfil${}##{}$\hfil&$##$\hfil\tabskip=0pt plus1fil\cr}
+\let\endequations=\endzed
+
+\def\symlist#1{\hbox{\@xsym#1\@ysym}}
+\def\@xsym#1{$#1$\@ysym}
+\def\@ysym#1{\ifx\@ysym#1\let\next=\@gobble
+	\else\enskip\let\next=\@xsym\fi\next{#1}}
+
+% Display of syntax for boxes
+\newdimen\littleboxwidth \littleboxwidth=180pt
+\def\boxpream{\halign to\littleboxwidth\bgroup
+        \strut\vrule\hskip\zedleftsep$\@lign##$\hfil \tabskip=0pt plus1fil\cr}
+\def\boxtop#1{\omit \hbox to\littleboxwidth{\strut
+	\vrule height0.4pt\hbox to\zedleftsep{\hrulefill\thinspace}%
+	#1\thinspace\hrulefill}\cr}
+\def\boxcontents#1#2{\sf#1 \\
+            \@zskip\jot\noalign{\vskip\jot}\@zskip\jot
+            \omit\llap{$\smash\lopt$\quad}%
+                        \hbox to\zedbar{\hrulefill}\cr\@zskip\jot
+                \sf#2\quad\ropt \\}
+\def\boxend{\@zskip\jot\noalign{\vskip\jot}\@zskip\jot
+	\omit \hbox to\littleboxwidth{\hrulefill}\cr}
+
+\def\({$\sf}
+\def\){$}
+
+\def\prf#1{(p.\ \pageref{p:#1})}
+
+%% TeXbook, Answer to ex. 14.28
+\def\strutdepth{\dp\strutbox}
+\def\marginalstar{\strut\vadjust{\kern-\strutdepth\specialstar}}
+\def\specialstar{\vtop to\strutdepth{%
+	\baselineskip=\strutdepth
+	\vss\llap{*\quad}\null}}
+
+%% Specials for drafting of new edition
+\def\old#1\par{\par}
+\let\new=\relax
+
+%% \reln xRy is either "(x |--> y) in R" or "x R y" according to taste
+%\def\reln#1#2#3{(#1 \mapsto #3) \in #2}
+\def\reln#1#2#3{#1 \inrel{#2} #3}
+
+%% Pascal keywords for Chapter 1
+\def\ARRAY{\mathrel{\bf array}}
+\def\OF{\mathrel{\bf of}}
+\def\PROC{\mathrel{\bf procedure}}
+\def\VAR{\mathrel{\bf var}}
+% \def\IF{\mathrel{\bf if}}	% These are now ...
+% \def\THEN{\mathrel{\bf then}} % ... part of fuzz.sty
+\def\BEGIN{\mathrel{\bf begin}}
+\def\END{{\bf end}}
+\def\WHILE{\mathrel{\bf while}}
+\def\DO{\mathrel{\bf do}}
+
+\let\IN=\inseq % need to index \inseq, but it alphabetizes wrongly
+
+%%
+%% FONTS
+%%
+
+% Use scaled 10pt & 7pt fonts to allow for reduction of CRC
+\font\twlrm=cmr10  scaled\magstep1
+\font\twlbf=cmbx10 scaled\magstep1
+\font\twlsl=cmsl10 scaled\magstep1
+\font\twlsf=cmss10 scaled\magstep1
+\font\twlmi=cmmi10 scaled\magstep1
+\font\twlit=cmti10 scaled\magstep1
+
+\font\egtit=cmti7  scaled\magstep1
+\font\egtsy=cmsy7  scaled\magstep1
+\font\egtrm=cmr7   scaled\magstep1
+\font\egtsf=cmss8
+
+% We need names for these fonts usually loaded on demand
+\font\elvsc=cmcsc10 scaled\magstephalf
+\font\frtnit=cmti10 scaled\magstep2
+
+% use cmex10 at right size not at 10pt
+\font\elvex=cmex10 scaled\magstephalf
+\font\twlex=cmex10 scaled\magstep1
+\@addfontinfo\@xipt{\textfont3=\elvex \scriptfont3=\elvex
+	\scriptscriptfont3=\elvex}
+\@addfontinfo\@xiipt{\textfont3=\twlex \scriptfont3=\twlex
+	\scriptscriptfont3=\twlex}
+
+% use cmss8 not cmss10 for subscripts?
+\@addfontinfo\@xipt{\scriptfont\sffam=\egtsf}
+\@addfontinfo\@xiipt{\scriptfont\sffam=\egtsf}

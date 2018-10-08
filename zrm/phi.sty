@@ -1,0 +1,449 @@
+% 'PHI' document style for ZRM as PHI red-and-white book.
+
+\typeout{Document Style `phi' dated 08/01/93.}
+
+\@options
+\def\@ptsize{2}
+\@twosidetrue
+
+% FONTS
+
+\lineskip 1pt            % \lineskip is 1pt for all font sizes.
+\normallineskip 1pt
+\def\baselinestretch{1}
+
+\medskipamount=7pt plus3pt minus2pt
+\bigskipamount=14pt plus6pt minus4pt
+
+\def\@normalsize{\@setsize\normalsize{14pt}\xiipt\@xiipt
+\abovedisplayskip=\medskipamount
+\belowdisplayskip=\abovedisplayskip
+\abovedisplayshortskip=\abovedisplayskip
+\belowdisplayshortskip=\belowdisplayskip}
+
+\def\footnotesize{\@setsize\footnotesize{13pt}\xipt\@xipt
+\abovedisplayskip=6pt plus3pt minus2pt
+\belowdisplayskip=\abovedisplayskip
+\abovedisplayshortskip=\abovedisplayskip
+\belowdisplayshortskip=\belowdisplayskip}
+ 
+\def\small{\@setsize\small{13pt}\xipt\@xipt}
+\def\large{\@setsize\large{21pt}\xivpt\@xivpt}
+\def\huge{\@setsize\huge{35pt}\xxvpt\@xxvpt}
+
+\normalsize  % Choose the normalsize font.
+
+% PAGE LAYOUT
+
+% VERTICAL SPACING:        
+
+                         % Top of page:
+\topmargin 0pt           %    Nominal distance from top of page to top of
+                         %    box containing running head.
+\headheight 14pt         %    Height of box containing running head.
+\headsep    14pt         %    Space between running head and text.
+\topskip    14pt         %    '\baselineskip' for first line of page.
+                         % Bottom of page:
+\footheight 14pt         %    Height of box containing running foot.
+\footskip   35pt         %    Distance from baseline of box containing foot 
+                         %    to baseline of last line of text.
+
+\newdimen\normaltopskip \normaltopskip=\topskip
+
+% DIMENSION OF TEXT:
+
+\textheight 14pt \multiply\textheight by44
+			 % Height of text (excluding running head and foot).
+\textwidth  35pc         % Width of text line.
+                         % For two-column mode: 
+\columnsep  24pt         %    Space between columns 
+\columnseprule 0pt       %    Width of rule between columns.
+
+% A better version of \raggedbottom: the bottom glue is made only
+% finitely stretchy, so any flex in the page can help out: this
+% stretch is added to \topskip so it is taken into account in
+% page-breaking.
+\newskip\botglue \botglue=0pt plus56pt
+\def\raggedbottom{\topskip=\normaltopskip
+	\advance\topskip by\botglue
+	\def\@texttop{\vskip-\botglue}%
+	\def\@textbottom{\vskip\botglue}}
+
+% PARAGRAPHS
+
+\newskip\normalparindent
+
+\parskip    0pt                    % Extra vertical space between paragraphs.
+\normalparindent  18pt             % Width of paragraph indentation.
+\parindent  \normalparindent
+\topsep     \medskipamount         % Extra vertical space, in addition to 
+                                   % \parskip, added above and below list and
+                                   % paragraphing environments.
+\partopsep  0pt                    % Extra vertical space, in addition to 
+                                   % \parskip and \topsep, added when user
+                                   % leaves blank line before environment.
+\itemsep    \medskipamount         % Extra vertical space, in addition to 
+                                   % \parskip, added between list items.
+
+\@lowpenalty   51      % Produced by \nopagebreak[1] or \nolinebreak[1]
+\@medpenalty  151      % Produced by \nopagebreak[2] or \nolinebreak[2]
+\@highpenalty 301      % Produced by \nopagebreak[3] or \nolinebreak[3]
+
+\@beginparpenalty -\@lowpenalty    % Before a list or paragraph environment.
+\@endparpenalty   -\@lowpenalty    % After a list or paragraph environment.
+\@itempenalty     -\@lowpenalty    % Between list items.
+
+% CHAPTERS AND SECTIONS
+
+% \@makechapterhead {TEXT} : Makes the heading for the \chapter command.
+\def\@makechapterhead#1{\vbox to196pt{\parindent 0pt \raggedright 
+	\edef\chapnum{\uppercase{Chapter \arabic{chapter}}}
+	\normalsize\rm \strut\chapnum\par
+	\vskip 14pt \huge\rm #1\par \vfil}}
+
+% \@makeschapterhead {TEXT} : Makes the heading for the \chapter* command.
+\def\@makeschapterhead#1{\vbox to196pt{\parindent 0pt \raggedright 
+	\vskip 28pt \huge\rm \strut#1\par \vfil}}
+
+% THEMA -- injects opening quote into chapter heading
+\def\thema{\nointerlineskip\vbox to0pt\bgroup\vss}
+\def\endthema{\par\unskip\vskip-\prevdepth\vskip\baselineskip\egroup}
+
+\def\chapter{\@prechapter\secdef\@chapter\@schapter}
+
+\def\@prechapter{\clearpage  % Starts new page.
+   \thispagestyle{head}      % Page style of chapter page is 'head'
+   \global\@topnum\z@        % Prevents figures from going at top of page.
+   \@afterindentfalse}       % Suppresses indent in first paragraph.
+
+\def\@chapter[#1]#2{%
+    \ifnum \c@secnumdepth >\m@ne
+        \refstepcounter{chapter}
+        \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
+    \else \addcontentsline{toc}{chapter}{#1}\fi
+    \chaptermark{#1}
+    \@makechapterhead{#2}
+    \@afterheading}
+
+\def\@schapter#1{\addcontentsline{toc}{chapter}{#1}
+	\@mkboth{#1}{#1} \@makeschapterhead{#1} \@afterheading}
+
+% \unlistedchapter: not numbered or listed in table of contents.
+\def\unlistedchapter#1{\@prechapter
+	\@mkboth{#1}{#1} \@makeschapterhead{#1} \@afterheading}
+
+\def\section{\@subhead{section}{1}{28pt}{28pt}{14pt}{\large\bf}}
+\def\subsection{\@subhead{subsection}{2}{14pt}{28pt}{14pt}{\normalsize\bf}}
+\def\paragraph{\@subhead{paragraph}{3}{14pt}{21pt}{7pt}{\normalsize\bf}}
+
+% \@subhead{NAME}{LEVEL}{BEFORE}{ABOVE}{AFTER}{STYLE}*{HEADING}
+%           1     2      3       4      5      6
+\def\@subhead#1#2#3#4#5#6{\if@noskipsec\leavevmode\fi\par
+	\if@nobreak\everypar{}\fi
+	\@ifstar{\@starhead{#3}{#4}{#5}{#6}}%
+		{\@head{#1}{#2}{#3}{#4}{#5}{#6}}}
+
+% \@head{NAME}{LEVEL}{BEFORE}{HEIGHT}{AFTER}{STYLE}{HEADING}
+%        1     2      3       4       5      6      7
+\def\@head#1#2#3#4#5#6#7{\ifnum#2>\c@secnumdepth\def\@svsec{}%
+	\else\refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname\ }\fi
+	\@xhead{#3}{#4}{#5}{#6}%
+	\vbox to#4{#6\vfil\hbox{\@svsec#7}}%
+	\csname #1mark\endcsname{#7}%
+	\addcontentsline{toc}{#1}{\ifnum#2>\c@secnumdepth\else
+		\protect\numberline{\csname the#1\endcsname}\fi #7}%
+	\@yhead{#5}}
+
+% \@starhead{BEFORE}{HEIGHT}{AFTER}{STYLE}{HEADING}
+%            1       2       3      4      5
+\def\@starhead#1#2#3#4#5{\@xhead{#1}{#2}{#3}{#4}%
+	\vbox to#2{#4\vfil\hbox{#5}}\@yhead{#3}}
+
+% \@xhead{BEFORE}{HEIGHT}{AFTER}{STYLE}
+%         1       2       3      4
+\def\@xhead#1#2#3#4{\if@nobreak\else
+	% Calculate the depth needed for two lines of next section
+	\dimen@=#1\advance\dimen@ by#2\advance \dimen@ by#3
+	\advance\dimen@ by2\baselineskip
+	% Output penalties and glue to let this page go short
+	% if there's not enough room
+	\nobreak
+	\vskip-\prevdepth\nointerlineskip
+	\vskip 0pt plus\dimen@
+	\penalty \@medpenalty
+	\vskip 0pt plus-\dimen@
+	\vskip #1\fi}
+
+\def\@yhead#1{\nobreak\vskip #1\@afterindentfalse\@afterheading}
+
+% Default initializations of \...mark commands.
+\def\chaptermark#1{}
+
+% The right mark is \botmark, not \firstmark (cf. p53 of ZRM).
+\def\rightmark{\expandafter\@rightmark\botmark}
+
+\setcounter{secnumdepth}{2} % As far as subsection
+
+% LISTS
+
+\leftmargini=\parindent
+\leftmarginii=\parindent
+\labelsep=5pt
+\parsep=0pt
+
+\leftmargin\leftmargini
+\labelwidth\leftmargini\advance\labelwidth-\labelsep
+
+\def\@listi{\leftmargin\leftmargini}
+
+\def\@listii{\leftmargin\leftmarginii
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep}
+
+% ENUMERATE
+%  Enumeration is done with four counters: enumi, enumii, enumiii
+%  and enumiv, where enumN controls the numbering of the Nth level
+%  enumeration.  The label is generated by the commands \labelenumi 
+%  ... \labelenumiv.  The expansion of \p@enumN\theenumN defines the 
+%  output of a \ref command.  
+
+\def\labelenumi{\arabic{enumi}.}    
+\def\theenumi{\arabic{enumi}}     
+ 
+\def\labelenumii{(\alph{enumii})}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+
+% ITEMIZE
+% Itemization is controlled by four commands: \labelitemi, \labelitemii,
+% \labelitemiii, and \labelitemiv, which define the labels of the various 
+% itemization levels.
+
+\def\labelitemi{$\bullet$}
+\def\labelitemii{\bf --}
+
+% QUOTATION
+%	used only for decorative quotations
+%   
+\def\quotation{\small\hyphenpenalty=10000\raggedright
+    \list{}{\listparindent=1.5em \advance\leftmargin by\leftmarginii}\item[]} 
+\let\endquotation=\endlist
+
+% PLAYLET
+
+%	used for decorative quotation
+%
+\def\playlet{\small\hyphenpenalty=10000\raggedright
+    \list{}{\listparindent=1.5em \itemsep=0pt \labelsep=0.5em
+		\labelwidth=0pt \def\makelabel##1{\hskip\labelsep{\sc ##1:}}%
+		\advance\leftmargin by\leftmarginii}}
+\let\endplaylet=\endlist
+
+% OBLIG
+%	lists of things to be proved.
+%
+\newcounter{oblig}
+
+\def\oblig#1{\list{(#1\arabic{oblig})}%
+	{\advance\leftmargin by\leftmarginii\usecounter{oblig}}}
+\let\endoblig=\endlist
+
+% MANPAGE
+
+% \begingroup and \endgroup are needed here because the list
+% environment has \endgroup ... \begingroup inside it.
+\def\manpage{\if@nobreak\else\newpage\fi\raggedbottom
+	\begingroup\list{}{\parsep=\medskipamount \labelwidth=0pt
+	\itemindent=-\leftmargin \zedindent=0pt
+	\let\makelabel=\manlabel \let\item=\manitem}}
+\def\endmanpage{\endlist\endgroup\newpage}
+
+\let\@@item=\item
+\def\manlabel#1{\hspace\labelsep \bf#1}
+\def\manitem[#1]{\@@item[#1]\leavevmode\par}
+
+% DESCRIPTION 
+%
+\def\description{\list{}{\labelwidth\z@ \itemindent-\leftmargin
+       \let\makelabel\descriptionlabel}}
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\let\enddescription\endlist
+
+\newdimen\descriptionmargin
+\descriptionmargin=3em
+
+% TITLE PAGE
+%	cover sheet for the CRC: P-H do the real title page themselves
+\def\titlepage{\newpage \thispagestyle{empty}}
+\def\endtitlepage{\newpage}
+
+% CHAPTERS AND SECTIONS
+
+\newcounter{chapter}
+\newcounter{section}[chapter]
+\newcounter{subsection}[section]
+\newcounter{paragraph}[subsection]
+
+\def\thechapter       {\arabic{chapter}}
+\def\thesection       {\thechapter.\arabic{section}}
+\def\thesubsection    {\thesection.\arabic{subsection}}
+
+% In chapter headings, the number is spelt out!
+\def\english#1{\@english{\@nameuse{c@#1}}}
+\def\@english#1{\ifcase #1 zero\or one\or two\or three\or four\or
+	five\or six\or seven\or eight\or nine\or ten\or eleven\or
+	twelve\else \@ctrerr\fi}
+
+% TABLE OF CONTENTS
+
+\def\tableofcontents{{\raggedbottom \unlistedchapter{Contents} 
+	\raggedright \small \@starttoc{toc} \newpage}}
+	
+\def\l@chapter{\if@nobreak\else\vskip0.5\baselineskip\fi
+	\@tocline{2\normalparindent}}
+\def\l@section{\@tocline{4\normalparindent}}
+\def\l@subsection{\@tocline{6\normalparindent}}
+\def\l@paragraph#1#2{}
+
+% \@tocline{INDENT}{TITLE}{PAGE} :
+%   A line in the table of contents, with parameters
+%       INDENT  : Indentation
+%       TITLE   : The text of the entry -- may contain \numberline commands
+%                 which put the number out to the left.
+%       PAGE    : The page number.
+\def\@tocline#1#2#3{{\parindent=#1 \hangindent=#1
+	\rightskip=3em \parfillskip=-\rightskip
+	\@afterindenttrue % Don't know why!
+        \interlinepenalty=10000 \leavevmode #2\hfill \rm #3\par}}
+ 
+\def\numberline#1{\hbox to0pt{\hskip-2\normalparindent #1\hfil}}
+
+% THE INDEX
+
+\newif\if@idxhead \@idxheadfalse
+\newtoks\@idxnote
+
+\def\indexnote{\@idxheadtrue\@idxnote=}
+
+\def\theindex{\columnseprule \z@ \columnsep 24pt \small
+	\twocolumn[\@makeschapterhead{General index}%
+			\if@idxhead\the\@idxnote\par\vskip\baselineskip\fi]
+	\@mkboth{General index}{General index}
+	\addcontentsline{toc}{chapter}{General index}
+    	\thispagestyle{head} \parindent\z@ \raggedright \raggedbottom
+	\exhyphenpenalty=10000 % To stop breaking of 136--7.
+	\let\item\@idxitem}
+
+\def\@idxitem{\par\hangindent=36pt}
+\def\subitem{\par\hangindent=36pt \hspace*{12pt}}
+
+\def\endtheindex{\onecolumn}
+
+\def\indexspace{\par\vskip\baselineskip}
+\def\indexbreak{\par\vfill\break}
+
+\def\thesymdex{\clearpage \chapter*{Index of symbols} \small
+	\setbox0=\vbox\bgroup\let\\=\cr \prevdepth=0pt
+			\halign\bgroup##\unskip\hfil&\quad##\unskip\hfil\cr}
+
+\def\endthesymdex{\egroup\egroup
+	\dimen0=\ht0 
+	\advance\dimen0 by2\baselineskip
+	\divide\dimen0 by3
+	\splittopskip=\baselineskip \vbadness=10000 \nointerlineskip
+	\hbox to\hsize{\valign{##\vfil\cr\vsplit0 to\dimen0\cr
+				\noalign{\hfil}\vsplit0 to\dimen0\cr
+				\noalign{\hfil}\box0\cr}}}
+
+\def\makesymdex{\if@filesw \newwrite\@symdexfile
+  \immediate\openout\@symdexfile=\jobname.sdx
+  \def\symdex{\@bsphack\begingroup
+             \def\protect####1{\string####1\space}\@sanitize
+             \@wrsymdex}\typeout
+  {Writing symdex file \jobname.sdx }\fi}
+
+\def\@wrsymdex#1{\let\thepage\relax
+   \xdef\@gtempa{\write\@symdexfile{\string
+      \symdexentry{#1}{\thepage}}}\endgroup\@gtempa
+   \if@nobreak \ifvmode\nobreak\fi\fi\@esphack}
+
+\def\symdex{\@bsphack\begingroup \@sanitize\@index}
+
+% THE GLOSSARY
+%
+\def\theglossary{\chapter*{Glossary}\@mkboth{Glossary}{Glossary}
+	\vskip-\topsep % to counteract glue at top of description.
+	\begingroup\description}
+\def\endtheglossary{\enddescription\endgroup}
+
+% FIGURES AND TABLES
+% These are the LaTeX defaults.  There are no floats in ZRM, but
+% omitting these definitions breaks the LaTeX output routine.
+\setcounter{topnumber}{2}
+\def\topfraction{.7}
+\setcounter{bottomnumber}{1}
+\def\bottomfraction{.3}
+\setcounter{totalnumber}{3}
+\def\textfraction{.2}
+\def\floatpagefraction{.5}
+\setcounter{dbltopnumber}{2}
+\def\dbltopfraction{.7}
+\def\dblfloatpagefraction{.5}
+
+% PAGE STYLES
+
+\mark{{}{}}
+
+% \ps@empty and \ps@plain defined in LATEX.TEX
+
+\def\ps@head{\let\@mkboth\@gobbletwo
+	\def\@oddhead{}\def\@evenhead{}%
+	\def\@oddfoot{\rm\hfil\thepage\hfil}\let\@evenfoot=\@oddfoot}
+
+\def\ps@body{\let\@mkboth=\markboth
+	\def\@oddfoot{}\let\@evenfoot=\@oddfoot
+	\def\@evenhead{\rm\thepage\hskip 24pt\sl\leftmark\hfil}%
+	\def\@oddhead{\hfil\sl\rightmark\hskip 24pt\rm\thepage}%
+	\def\chaptermark##1{\markboth{##1}{##1}}%
+	\def\sectionmark##1{\markright{\ifnum\c@secnumdepth>\z@
+		\thesection\ \fi ##1}}}
+
+% FOOTNOTES -- copied almost directly from book.sty
+
+\def\footnoterule{\kern-3pt
+  \hrule width .4\columnwidth
+  \kern 2.6pt}                 % The \hrule has default height of .4pt.
+
+\@addtoreset{footnote}{chapter}  % Numbers footnotes within chapters
+
+\long\def\@makefntext#1{\parindent 1.5em\noindent
+            \hbox to 1.5em{\hss$\m@th^{\@thefnmark}$}#1}
+
+\footnotesep=9.1pt    % Height of strut placed at the beginning of every
+                      % footnote = height of normal \footnotesize strut,
+                      % so no extra space between footnotes. (= 0.7 * 13pt)
+ 
+\skip\footins=\bigskipamount  % Space between last line of
+                              % text and top of first footnote.
+ 
+
+% MISCELLANEOUS
+
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi, 
+  \number\year}
+
+\arrayrulewidth=0.4pt
+\doublerulesep=2pt
+
+\def\raggedright{\let\\=\@centercr\@rightskip=0pt plus2em
+	\rightskip\@rightskip \leftskip\z@ \parindent\z@}
+
+% INITIALIZATION
+
+\ps@body                    % `body' page style
+\pagenumbering{arabic}      % Arabic page numbers
+\onecolumn                  % Single-column.
+\overfullrule=5pt	    % Do mark overfull boxes
+
+\def\manbreak{\vadjust{\break}}
