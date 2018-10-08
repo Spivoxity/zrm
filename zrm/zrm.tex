@@ -1,3 +1,23 @@
+% The Z Notation: A Reference Manual
+% J. M. Spivey
+% Programming Research Group
+% University of Oxford
+%
+% This edition first published 1992 by
+% Prentice Hall International (UK) Ltd
+%
+% Published 1998 by
+% J. M. Spivey
+% Oriel College, Oxford, OX1 4EW, England
+% 
+% Copyright J. M. Spivey, 1989, 1992
+%
+% All rights reserved. No part of this publication may be reproduced,
+% stored in a retrieval system, or transmitted, in any form. or by any
+% means, electronic, mechanical, photocopying, recording or otherwise,
+% without prior permission, in writing, from the publisher.
+% For permission in all countries contact the author.
+
 \documentstyle[fuzz,zrm]{phi}
 	\makeindex \makeglossary \makesymdex
 	\hyphenation{para-meters opera-tion opera-tions
@@ -7,7 +27,55 @@
 \begin{document}
 
 \pagenumbering{roman}
-\setcounter{page}{5} 		% PHI set pages i-iv
+\setcounter{page}{3}	% We omit the half-title.
+
+% Title page
+\thispagestyle{empty}
+{\parindent=0pt \parskip=0pt
+\hrule height0pt
+\vskip 21pt
+{\Hugebf The Z Notation:\par}
+\vskip 14pt
+{\LARGE\bf A Reference Manual\par}
+\vskip 14pt
+{\large Second Edition\par}
+\vskip 28pt
+{\Large J. M. Spivey\par}
+\vskip 7pt
+{\it Programming Research Group\\
+  University of Oxford\par}
+\vskip 28pt
+{\large Based on the work of\par}
+\vskip 7pt
+{\hsize=0.66\hsize \large \raggedright \noindent
+	J.~R.~Abrial, I.~J.~Hayes, C.~A.~R.~Hoare,
+	He~Jifeng, C.~C.~Morgan, J.~W.~Sanders,
+	I.~H.~S\o rensen, J.~M.~Spivey, B.~A.~Sufrin \par}}
+\clearpage
+
+% T.P. verso
+\thispagestyle{empty}
+{\raggedright
+\noindent
+This edition first published 1992 by\\
+Prentice Hall International (UK) Ltd
+\vskip 14pt
+\noindent
+Published 1998 by\\
+J. M. Spivey\\
+Oriel College, Oxford, OX1 4EW, England
+\vskip 14pt
+\noindent
+\copyright\ J. M. Spivey, 1989, 1992
+\vskip 14pt
+\noindent
+All rights reserved. No part of this publication may be reproduced,
+stored in a retrieval system, or transmitted, in any form. or by any
+means, electronic, mechanical, photocopying, recording or otherwise,
+without prior permission, in writing, from the publisher.\\
+For permission in all countries contact the author.
+\clearpage}
+
 \tableofcontents		% Table of contents
 
 % Preface begins on a recto - revise if necessary for even working.
@@ -193,9 +261,9 @@ the text.
 
 \section*{Acknowledgements}
 
-It is my pleasure to end this preface by thanking my present and
+It gives me great pleasure to end this preface by thanking my present and
 former colleagues for allowing me to contribute to the work of theirs
-reported in this book; many of the ideas are theirs, and I am pleased
+reported in this book; many of the ideas are theirs, and I am happy
 that their names appear with mine on the title page.  I owe a special
 debt of thanks to Bernard Sufrin, whose {\em Z Handbook\/} was the
 starting point for this manual, and whose constant advice and

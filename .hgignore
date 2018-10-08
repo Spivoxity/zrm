@@ -1,0 +1,19 @@
+syntax: glob
+zrm/glossary.tex
+zrm/index.tex
+zrm/patches
+zrm/symdex.tex
+zrm/tools/common.o
+zrm/tools/gloss
+zrm/tools/gloss.o
+zrm/tools/index
+zrm/tools/index.o
+zrm/tools/symdex
+zrm/tools/symdex.o
+zrm/zrm.aux
+zrm/zrm.glo
+zrm/zrm.idx
+zrm/zrm.log
+zrm/zrm.pdf
+zrm/zrm.sdx
+zrm/zrm.toc
