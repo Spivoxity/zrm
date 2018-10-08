@@ -17,3 +17,4 @@ zrm.pdf: zrm.tex
 
 clean:
 	rm -f zrm.aux zrm.pdf zrm.glo zrm.idx zrm.log zrm.sdx zrm.toc
+	rm -f index.tex symdex.tex glossary.tex
